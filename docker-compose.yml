@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  drupal_tut_database:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+    ports:
+      - "3310:3306"
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+
+  drupal_tut_web:
+    build: .
+    depends_on:
+      - drupal_tut_database
+    restart: always
+    ports:
+      - "8001:8007"
+    volumes:
+      - .:/var/www/html
